@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum アプリケーション</title>
+    <link rel="stylesheet" href="{% static 'main/css/index.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Forum</h1>
+        <h2 class="subtitle">各掲示板へのリンク</h2>
+        <ul class="topic-list">
+            {% for topic in topics %}
+            <li class="topic-item">
+                <a class="topic-link" href="{% url 'forum' topic %}">{{ topic }}の掲示板へ</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

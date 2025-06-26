@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum アプリケーション</title>
+    <link rel="stylesheet" href="{% static 'main/css/forum.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">掲示板</h1>
+        <h2 class="subtitle">{{ topic.name }}</h2>
+
+        <table class="message-list">
+            {% for message in messages %}
+            <tr class="message-row">
+                <th class="message-cell">{{ message.content }}</th>
+                <th class="message-cell">{{ message.created_at }}</th>
+                <th class="message-cell">
+                    <form class="message-form" action="{% url 'delete_message' topic.name message.pk %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" class="btn-submit" value="削除">
+                    </form>
+                </th>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <form class="message-form" action="{% url 'forum' topic.name %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="message" class="message-input" placeholder="メッセージを入力">
+            <input type="submit" class="btn-submit" value="投稿">
+        </form>
+
+        <a class="home-link" href="{% url 'index' %}">ホームへ</a>
+    </div>
+</body>
+</html>
