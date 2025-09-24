@@ -10,6 +10,11 @@
     <div class="container">
         <h1 class="title">Forum</h1>
         <h2 class="subtitle">各掲示板へのリンク</h2>
+        {% if request.user.is_authenticated %}
+        <a class="accounts-link" href="{% url 'account_logout' %}">ログアウト</a>
+        {% else %}
+        <a class="accounts-link" href="{% url 'account_login' %}">ログイン</a>
+        {% endif %}
         <ul class="topic-list">
             {% for topic in topics %}
             <li class="topic-item">

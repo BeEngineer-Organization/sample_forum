@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load static %}
+{% load static forum %}
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -10,17 +10,24 @@
     <div class="container">
         <h1 class="title">掲示板</h1>
         <h2 class="subtitle">{{ topic.name }}</h2>
-
+        {# 追加ここから #}
+        <form method="GET" class="search-form">
+            {{ search_form.keyword }}
+            <button type="submit" class="btn-submit-search">検索</button>
+        </form>
+        {# 追加ここまで #}
         <table class="message-list">
             <tr class="message-header">
                 <th>投稿内容</th>
+                <th>投稿者</th>{# 追加 #}
                 <th>投稿日時</th>
                 <th>操作</th>
             </tr>
             {% for message in messages %}
             <tr class="message-data">
                 <td class="message-cell">{{ message.content }}</td>
-                <td class="message-cell">{{ message.created_at }}</td>
+                <td class="message-cell">{{ message.user.username }}</td>{# 追加 #}
+                <td class="message-cell">{{ message.created_at|elapsed_time }}</td>{# 追加 #}
                 <td class="message-cell">
                     <form class="message-form" action="{% url 'delete_message' topic.name message.pk %}" method="POST">
                         {% csrf_token %}
@@ -28,12 +35,41 @@
                     </form>
                 </td>
             </tr>
+            {# 追加ここから #}
+            <tr>
+                {% if message.image %}
+                <th>
+                    <img src="{{ message.image.url }}" width="auto" height="200px">
+                </th>
+                {% endif %}
+            </tr>
+            {# 追加ここまで #}
             {% endfor %}
         </table>
 
-        <form class="message-form" action="{% url 'forum' topic.name %}" method="POST">
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                <a href="{% url 'forum' topic.name %}?page=1">&laquo; 先頭へ</a>
+                <a href="{% url 'forum' topic.name %}?page={{ page_obj.previous_page_number }}">前へ</a>
+                {% endif %}
+    
+                <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    
+                {% if page_obj.has_next %}
+                <a href="{% url 'forum' topic.name %}?page={{ page_obj.next_page_number }}">次へ</a>
+                <a href="{% url 'forum' topic.name %}?page={{ page_obj.paginator.num_pages }}">最後へ &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+
+        <form class="message-form" action="{% url 'forum' topic.name %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="text" name="message" class="message-input" placeholder="メッセージを入力">
+            <label>
+                画像
+                <input type="file" name="image">
+            </label>
             <input type="submit" class="btn-submit" value="投稿">
         </form>
 

@@ -43,3 +43,12 @@ body {
     text-decoration: none;
     color: #333;
 }
+
+/* 追加ここから */
+.accounts-link {
+    display: inline-block;
+    text-decoration: none;
+    color: #4a90e2;
+    font-weight: bold;
+}
+/* 追加ここまで */

@@ -38,16 +38,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "main",
+    'accounts', # 追加
+    'django.contrib.sites', # 追加
+    'allauth', # 追加
+    'allauth.account', # 追加
+    'allauth.socialaccount', # 追加
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "django.middleware.locale.LocaleMiddleware",  # 追加
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     "allauth.account.middleware.AccountMiddleware", # 追加
 ]
 
 ROOT_URLCONF = 'forum.urls'
@@ -103,11 +110,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
-USE_I18N = True
+USE_I18N = True  # デフォルトでは True のため、編集する必要はない。
 
 USE_TZ = True
 
@@ -121,3 +128,34 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 追加ここから
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+SITE_ID = 1
+LOGIN_REDIRECT_URL = 'index'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'index'
+ACCOUNT_LOGOUT_ON_GET = True
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+MEDIA_ROOT = BASE_DIR / "media"
+
+MEDIA_URL = "/media/"
+
+# 翻訳ファイルの場所を指定
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
+
+# サポートする言語を列挙
+LANGUAGES = [
+    ("en", "English"),
+    ("ja", "Japanese"),
+]
+# 追加ここまで

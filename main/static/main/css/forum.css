@@ -75,3 +75,45 @@ body {
     color: #4a90e2;
     font-weight: bold;
 }
+
+/* 追加ここから */
+.search-form {
+    margin-bottom: 16px;
+}
+
+.search-form input[type="text"] {
+    padding: 4px 8px;
+    width: 250px;
+    border: 1px solid #666;
+    border-radius: 5px;
+}
+
+.btn-submit-search {
+    padding: 4px 16px;
+    color: #fff;
+    background-color: #66CCFF;
+    border: none;
+    border-radius: 5px;
+}
+
+.pagination {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.step-links {
+    font-size: 0.9rem;
+}
+
+.message-form input[type="file"] {
+    display: none;
+}
+
+.message-form label {
+    padding: 10px 18px;
+    color: #fff;
+    background-color: #66CCFF;
+    border: none;
+    border-radius: 5px;
+}
+/* 追加ここまで */
