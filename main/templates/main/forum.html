@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -12,16 +12,21 @@
         <h2 class="subtitle">{{ topic.name }}</h2>
 
         <table class="message-list">
+            <tr class="message-header">
+                <th>投稿内容</th>
+                <th>投稿日時</th>
+                <th>操作</th>
+            </tr>
             {% for message in messages %}
-            <tr class="message-row">
-                <th class="message-cell">{{ message.content }}</th>
-                <th class="message-cell">{{ message.created_at }}</th>
-                <th class="message-cell">
+            <tr class="message-data">
+                <td class="message-cell">{{ message.content }}</td>
+                <td class="message-cell">{{ message.created_at }}</td>
+                <td class="message-cell">
                     <form class="message-form" action="{% url 'delete_message' topic.name message.pk %}" method="POST">
                         {% csrf_token %}
                         <input type="submit" class="btn-submit" value="削除">
                     </form>
-                </th>
+                </td>
             </tr>
             {% endfor %}
         </table>
