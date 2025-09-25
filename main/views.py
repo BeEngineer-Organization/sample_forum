@@ -10,12 +10,6 @@ class IndexView(ListView):
     model = Topic
     context_object_name = "topics"
 
-    def get_queryset(self, **kwargs):
-        queryset = (
-            Topic.objects.all()
-        )
-        return queryset
-
 
 # def forum(request, topic_name):
 #     topic = Topic.objects.get(name=topic_name)
@@ -28,6 +22,7 @@ class IndexView(ListView):
 #             Message.objects.create(
 #                 topic=topic,
 #                 content=message,
+#                 user=request.user,  # 追加
 #             )
 #     context = {
 #         "messages": messages,
