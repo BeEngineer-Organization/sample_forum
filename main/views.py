@@ -44,10 +44,10 @@ class ForumView(ListView):
         topic = self.get_topic()
         context["topic"] = topic
 
+        keyword = self.request.GET.get("keyword")
+        context["keyword"] = keyword
+        
         form = MessageSearchForm(self.request.GET)
-        if form.is_valid():
-            context["keyword"] = form.cleaned_data["keyword"]
-
         context["search_form"] = form
         return context
 
@@ -55,11 +55,9 @@ class ForumView(ListView):
         topic = self.get_topic()
         queryset = Message.objects.filter(topic=topic).order_by("created_at")
 
-        form = MessageSearchForm(self.request.GET)
-        if form.is_valid():
-            keyword = form.cleaned_data["keyword"]
-            if keyword:
-                queryset = queryset.filter(content__icontains=keyword)
+        keyword = self.request.GET.get("keyword")
+        if keyword:
+            queryset = queryset.filter(content__icontains=keyword)
         return queryset
 
     def post(self, request, *args, **kwargs):
