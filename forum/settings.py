@@ -114,7 +114,7 @@ LANGUAGE_CODE = 'ja'
 
 TIME_ZONE = 'Asia/Tokyo'
 
-USE_I18N = True  # デフォルトでは True のため、編集する必要はない。
+USE_I18N = True
 
 USE_TZ = True
 
@@ -148,14 +148,4 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 MEDIA_URL = "/media/"
 
-# 翻訳ファイルの場所を指定
-LOCALE_PATHS = [
-    BASE_DIR / "locale",
-]
-
-# サポートする言語を列挙
-LANGUAGES = [
-    ("en", "English"),
-    ("ja", "Japanese"),
-]
 # 追加ここまで
