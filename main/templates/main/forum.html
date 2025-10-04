@@ -27,7 +27,7 @@
             <tr class="message-data">
                 <td class="message-cell">{{ message.content }}</td>
                 <td class="message-cell">{{ message.user.username }}</td>{# 追加 #}
-                <td class="message-cell">{{ message.created_at }}</td>{# 追加 #}
+                <td class="message-cell">{{ message.created_at|elapsed_time }}</td>{# 追加 #}
                 <td class="message-cell">
                     <form class="message-form" action="{% url 'delete_message' topic.name message.pk %}" method="POST">
                         {% csrf_token %}
