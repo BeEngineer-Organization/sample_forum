@@ -5,10 +5,7 @@ from django.utils import timezone
 
 register = template.Library()
 
-from django.utils.translation import gettext, ngettext
-
 @register.filter
-@register.simple_tag
 def elapsed_time(dt):
     if not dt:
         return None
