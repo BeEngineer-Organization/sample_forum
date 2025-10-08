@@ -44,7 +44,7 @@ class ForumView(ListView):
         topic = self.get_topic()
         context["topic"] = topic
 
-        keyword = self.request.GET.get("keyword")
+        keyword = self.request.GET.get("keyword") or ""
         context["keyword"] = keyword
         
         form = MessageSearchForm(self.request.GET)
