@@ -24,7 +24,7 @@
                 <th>操作</th>
             </tr>
             {% for message in messages %}
-            <tr class="message-data">
+            <tr class="{% if message.image %}{% else %}message-data{% endif %}">
                 <td class="message-cell">{{ message.content }}</td>
                 <td class="message-cell">{{ message.user.username }}</td>{# 追加 #}
                 <td class="message-cell">{{ message.created_at|elapsed_time }}</td>{# 追加 #}
@@ -36,13 +36,13 @@
                 </td>
             </tr>
             {# 追加ここから #}
-            <tr>
-                {% if message.image %}
+            {% if message.image %}
+            <tr class="message-data">
                 <th>
                     <img src="{{ message.image.url }}" width="auto" height="200px">
                 </th>
-                {% endif %}
             </tr>
+            {% endif %}
             {# 追加ここまで #}
             {% endfor %}
         </table>
@@ -66,11 +66,11 @@
         <form class="message-form" action="{% url 'forum' topic.name %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="text" name="message" class="message-input" placeholder="メッセージを入力">
-            <label>
-                画像
-                <input type="file" name="image">
-            </label>
-            <!-- <input type="file" name="image"> -->
+            {# <label> #}
+                {# 画像 #}
+                {# <input type="file" name="image"> #}
+            {# </label> #}
+            <input type="file" name="image">
             <input type="submit" class="btn-submit" value="投稿">
         </form>
 

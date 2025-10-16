@@ -105,15 +105,15 @@ body {
     font-size: 0.9rem;
 }
 
-.message-form input[type="file"] {
+/* .message-form input[type="file"] {
     display: none;
-}
+} */
 
-.message-form label {
+/* .message-form label {
     padding: 10px 18px;
     color: #fff;
     background-color: #66CCFF;
     border: none;
     border-radius: 5px;
-}
+} */
 /* 追加ここまで */
