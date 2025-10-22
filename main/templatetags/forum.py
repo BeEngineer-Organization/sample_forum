@@ -5,6 +5,7 @@ from django.utils import timezone
 
 register = template.Library()
 
+
 @register.filter
 def elapsed_time(dt):
     if not dt:
@@ -22,7 +23,7 @@ def elapsed_time(dt):
         raise ValueError("未来の時刻です。")
 
     if delta < one_hour:  # 経過時間が 1 時間以内のとき
-            return f"{delta.seconds // 60} 分前"
+        return f"{delta.seconds // 60} 分前"
     elif delta < one_day:  # 経過時間が 1 日以内のとき
         return f"{delta.seconds // 3600} 時間前"
     elif delta < one_week:  # 経過時間が 1 週間以内のとき

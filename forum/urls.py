@@ -7,7 +7,7 @@ from . import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("forum/", include("main.urls")),
-    path('accounts/', include('allauth.urls')), # 追加
+    path("accounts/", include("allauth.urls")),  # 追加
 ]
 
 # 以下を追加
