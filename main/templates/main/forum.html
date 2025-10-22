@@ -39,7 +39,7 @@
                         {% csrf_token %}
                         <input type="submit" class="btn-submit" value="削除">
                     </form>
-                    {% elif request.user.is_authenticated %}
+                    {% else %}
                     <a href="{% url 'reply' topic.name message.pk %}" class="btn-submit">返信</a>
                     {% endif %}
                 </td>

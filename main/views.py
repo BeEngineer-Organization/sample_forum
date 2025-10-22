@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
@@ -82,7 +83,7 @@ def delete_message(request, topic_name, pk):
     return redirect("forum", topic_name=topic_name)
 
 
-class ReplyView(CreateView):
+class ReplyView(LoginRequiredMixin, CreateView):
     template_name = "main/reply.html"
     model = Message
     form_class = ReplyForm
