@@ -4,5 +4,10 @@ from . import views
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
     path("<topic_name>/", views.ForumView.as_view(), name="forum"),
-    path("<topic_name>/message/<int:pk>/delete/", views.delete_message, name="delete_message"),
+    path(
+        "<topic_name>/message/<int:pk>/delete/",
+        views.delete_message,
+        name="delete_message",
+    ),
+    path("<topic_name>/reply/<int:pk>", views.ReplyView.as_view(), name="reply"),
 ]
