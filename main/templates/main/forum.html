@@ -26,22 +26,15 @@
             {% for message in messages %}
             <tr class="{% if message.image %}{% else %}message-data{% endif %}">
                 <td class="message-cell">
-                    {% if message.reply_to.all %}
-                    >>{{ message.reply_to.all.0.content }}<br><br>
-                    {% endif %}
                     {{ message.content }}
                 </td>
                 <td class="message-cell">{{ message.user.username }}</td>{# 追加 #}
                 <td class="message-cell">{{ message.created_at|elapsed_time }}</td>{# 追加 #}
                 <td class="message-cell">
-                    {% if request.user == message.user %}
                     <form class="message-form" action="{% url 'delete_message' topic.name message.pk %}" method="POST">
                         {% csrf_token %}
                         <input type="submit" class="btn-submit" value="削除">
                     </form>
-                    {% else %}
-                    <a href="{% url 'reply' topic.name message.pk %}" class="btn-submit">返信</a>
-                    {% endif %}
                 </td>
             </tr>
             {# 追加ここから #}

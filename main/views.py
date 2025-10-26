@@ -1,10 +1,7 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
 
-from .forms import MessageSearchForm, ReplyForm
+from .forms import MessageSearchForm
 from .models import Topic, Message
 
 
@@ -81,39 +78,3 @@ def delete_message(request, topic_name, pk):
     message = get_object_or_404(Message, pk=pk)
     message.delete()
     return redirect("forum", topic_name=topic_name)
-
-
-class ReplyView(LoginRequiredMixin, CreateView):
-    template_name = "main/reply.html"
-    model = Message
-    form_class = ReplyForm
-
-    def get_topic(self):
-        return Topic.objects.get(name=self.kwargs["topic_name"])
-
-    def get_message(self):
-        return Message.objects.get(pk=self.kwargs["pk"])
-
-    def get_success_url(self):
-        topic = self.get_topic()
-        return reverse_lazy("forum", kwargs={"topic_name": topic.name})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        topic = self.get_topic()
-        context["topic"] = topic
-        message = self.get_message()
-        context["message"] = message
-        return context
-
-    def form_valid(self, form):
-        object = form.save(commit=False)
-        object.user = self.request.user
-        topic = self.get_topic()
-        object.topic = topic
-        object.save()
-
-        # オブジェクト作成後にreply_toに追加
-        message = self.get_message()
-        object.reply_to.add(message)
-        return super().form_valid(form)

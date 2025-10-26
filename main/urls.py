@@ -9,5 +9,4 @@ urlpatterns = [
         views.delete_message,
         name="delete_message",
     ),
-    path("<topic_name>/reply/<int:pk>", views.ReplyView.as_view(), name="reply"),
 ]
