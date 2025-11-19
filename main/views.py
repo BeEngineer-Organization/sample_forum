@@ -11,8 +11,8 @@ class IndexView(ListView):
     context_object_name = "topics"
 
 
-# def forum(request, topic_name):
-#     topic = Topic.objects.get(name=topic_name)
+# def forum(request, topic_id):
+#     topic = Topic.objects.get(pk=topic_id)
 #     messages = (
 #         Message.objects.filter(topic=topic).order_by("created_at")
 #     )
@@ -37,7 +37,7 @@ class ForumView(ListView):
     paginate_by = 5
 
     def get_topic(self):
-        return Topic.objects.get(name=self.kwargs["topic_name"])
+        return Topic.objects.get(pk=self.kwargs["topic_id"])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -71,10 +71,10 @@ class ForumView(ListView):
                 image=image,
                 user=request.user,
             )
-        return redirect("forum", topic_name=topic.name)
+        return redirect("forum", topic_id=topic.pk)
 
 
-def delete_message(request, topic_name, pk):
+def delete_message(request, topic_id, pk):
     message = get_object_or_404(Message, pk=pk)
     message.delete()
-    return redirect("forum", topic_name=topic_name)
+    return redirect("forum", topic_id=topic_id)

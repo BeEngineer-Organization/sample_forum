@@ -31,7 +31,7 @@
                 <td class="message-cell">{{ message.user.username }}</td>{# 追加 #}
                 <td class="message-cell">{{ message.created_at|elapsed_time }}</td>{# 追加 #}
                 <td class="message-cell">
-                    <form class="message-form" action="{% url 'delete_message' topic.name message.pk %}" method="POST">
+                    <form class="message-form" action="{% url 'delete_message' topic.pk message.pk %}" method="POST">
                         {% csrf_token %}
                         <input type="submit" class="btn-submit" value="削除">
                     </form>
@@ -52,20 +52,20 @@
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                <a href="{% url 'forum' topic.name %}?keyword={{ keyword }}&page=1">&laquo; 先頭へ</a>
-                <a href="{% url 'forum' topic.name %}?keyword={{ keyword }}&page={{ page_obj.previous_page_number }}">前へ</a>
+                <a href="{% url 'forum' topic.pk %}?keyword={{ keyword }}&page=1">&laquo; 先頭へ</a>
+                <a href="{% url 'forum' topic.pk %}?keyword={{ keyword }}&page={{ page_obj.previous_page_number }}">前へ</a>
                 {% endif %}
     
                 <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
     
                 {% if page_obj.has_next %}
-                <a href="{% url 'forum' topic.name %}?keyword={{ keyword }}&page={{ page_obj.next_page_number }}">次へ</a>
-                <a href="{% url 'forum' topic.name %}?keyword={{ keyword }}&page={{ page_obj.paginator.num_pages }}">最後へ &raquo;</a>
+                <a href="{% url 'forum' topic.pk %}?keyword={{ keyword }}&page={{ page_obj.next_page_number }}">次へ</a>
+                <a href="{% url 'forum' topic.pk %}?keyword={{ keyword }}&page={{ page_obj.paginator.num_pages }}">最後へ &raquo;</a>
                 {% endif %}
             </span>
         </div>
 
-        <form class="message-form" action="{% url 'forum' topic.name %}" method="POST" enctype="multipart/form-data">
+        <form class="message-form" action="{% url 'forum' topic.pk %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="text" name="message" class="message-input" placeholder="メッセージを入力">
             {# <label> #}
