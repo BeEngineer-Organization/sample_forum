@@ -13,7 +13,7 @@
         <ul class="topic-list">
             {% for topic in topics %}
             <li class="topic-item">
-                <a class="topic-link" href="{% url 'forum' topic.name %}">{{ topic.name }}の掲示板へ</a>
+                <a class="topic-link" href="{% url 'forum' topic.pk %}">{{ topic.name }}の掲示板へ</a>
             </li>
             {% endfor %}
         </ul>

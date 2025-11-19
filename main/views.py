@@ -11,8 +11,8 @@ def index(request):
     return render(request, "main/index.html", context)
 
 
-def forum(request, topic_name):
-    topic = Topic.objects.get(name=topic_name)
+def forum(request, topic_id):
+    topic = Topic.objects.get(id=topic_id)
     print(topic)
     messages = Message.objects.filter(topic=topic).order_by("created_at")
     if request.method == "POST":
@@ -28,7 +28,7 @@ def forum(request, topic_name):
     return render(request, "main/forum.html", context)
 
 
-def delete_message(request, topic_name, pk):
+def delete_message(request, topic_id, pk):
     message = get_object_or_404(Message, pk=pk)
     message.delete()
-    return redirect("forum", topic_name=topic_name)
+    return redirect("forum", topic_id=topic_id)

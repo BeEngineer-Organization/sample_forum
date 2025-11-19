@@ -22,7 +22,7 @@
                 <td class="message-cell">{{ message.content }}</td>
                 <td class="message-cell">{{ message.created_at }}</td>
                 <td class="message-cell">
-                    <form class="message-form" action="{% url 'delete_message' topic.name message.pk %}" method="POST">
+                    <form class="message-form" action="{% url 'delete_message' topic.pk message.pk %}" method="POST">
                         {% csrf_token %}
                         <input type="submit" class="btn-submit" value="削除">
                     </form>
@@ -31,7 +31,7 @@
             {% endfor %}
         </table>
 
-        <form class="message-form" action="{% url 'forum' topic.name %}" method="POST">
+        <form class="message-form" action="{% url 'forum' topic.pk %}" method="POST">
             {% csrf_token %}
             <input type="text" name="message" class="message-input" placeholder="メッセージを入力">
             <input type="submit" class="btn-submit" value="投稿">
