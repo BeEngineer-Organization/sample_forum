@@ -21,28 +21,6 @@ class IndexView(ListView):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            # queryset = Topic.objects.all().annotate(
-            #     topic_message__created_at__max=Max(
-            #         "topic_message__created_at"
-            #     ),
-            #     my_topic_message__created_at__max=Max(
-            #         "topic_message__created_at",
-            #         filter=Q(topic_message__user=self.request.user),
-            #     ),
-            #     for_comparison=Coalesce(
-            #         "my_topic_message__created_at__max", "topic_message__created_at__max"
-            #     ),
-            #     others_topic_message__created_at__max=NullIf(
-            #         "topic_message__created_at__max", "for_comparison"
-            #     ),
-            # ).order_by("-others_topic_message__created_at__max", "-topic_message__created_at__max")
-
-            my_topic_message_with_reply = Message.objects.filter(
-                user=self.request.user, reply_from_parent_message__isnull=False
-            )
-            for t in my_topic_message_with_reply:
-                print(t.created_at)
-
             queryset = (
                 Topic.objects.all()
                 .annotate(
