@@ -39,7 +39,7 @@
                         <input type="submit" class="btn-submit" value="削除">
                     </form>
                     {% else %}
-                    <a href="{% url 'forum' topic.id %}?keyword={{ keyword }}&page={{ page_obj.number }}&parent_message_pk={{ message.pk }}" class="btn-reply">返信</a>
+                    <a href="?keyword={{ keyword }}&page={{ page_obj.number }}&parent_message_pk={{ message.pk }}" class="btn-reply">返信</a>
                     {% endif %}
                 </td>
             </tr>
