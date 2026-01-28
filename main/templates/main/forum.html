@@ -10,12 +10,10 @@
     <div class="container">
         <h1 class="title">掲示板</h1>
         <h2 class="subtitle">{{ topic.name }}</h2>
-        {# 追加ここから #}
         <form method="GET" class="search-form">
             {{ search_form.keyword }}
             <button type="submit" class="btn-submit-search">検索</button>
         </form>
-        {# 追加ここまで #}
         <table class="message-list">
             <tr class="message-header">
                 <th>投稿内容</th>
@@ -26,18 +24,25 @@
             {% for message in messages %}
             <tr class="{% if message.image %}{% else %}message-data{% endif %}">
                 <td class="message-cell">
+                    {% if message.parent_message_username and message.parent_message_content %}
+                    >> {{ message.parent_message_username }}: {{ message.parent_message_content }}
+                    <br>
+                    {% endif %}
                     {{ message.content }}
                 </td>
                 <td class="message-cell">{{ message.user.username }}</td>{# 追加 #}
                 <td class="message-cell">{{ message.created_at|elapsed_time }}</td>{# 追加 #}
                 <td class="message-cell">
-                    <form class="message-form" action="{% url 'delete_message' topic.pk message.pk %}" method="POST">
+                    {% if message.user == request.user %}
+                    <form class="message-form" action="{% url 'delete_message' topic.id message.pk %}" method="POST">
                         {% csrf_token %}
                         <input type="submit" class="btn-submit" value="削除">
                     </form>
+                    {% else %}
+                    <a href="{% url 'forum' topic.id %}?keyword={{ keyword }}&page={{ page_obj.number }}&parent_message_pk={{ message.pk }}" class="btn-reply">返信</a>
+                    {% endif %}
                 </td>
             </tr>
-            {# 追加ここから #}
             {% if message.image %}
             <tr class="message-data">
                 <th>
@@ -45,28 +50,36 @@
                 </th>
             </tr>
             {% endif %}
-            {# 追加ここまで #}
             {% endfor %}
         </table>
 
         <div class="pagination">
             <span class="step-links">
                 {% if page_obj.has_previous %}
-                <a href="{% url 'forum' topic.pk %}?keyword={{ keyword }}&page=1">&laquo; 先頭へ</a>
-                <a href="{% url 'forum' topic.pk %}?keyword={{ keyword }}&page={{ page_obj.previous_page_number }}">前へ</a>
+                <a href="{% url 'forum' topic.id %}?keyword={{ keyword }}&page=1">&laquo; 先頭へ</a>
+                <a href="{% url 'forum' topic.id %}?keyword={{ keyword }}&page={{ page_obj.previous_page_number }}">前へ</a>
                 {% endif %}
     
                 <span class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
     
                 {% if page_obj.has_next %}
-                <a href="{% url 'forum' topic.pk %}?keyword={{ keyword }}&page={{ page_obj.next_page_number }}">次へ</a>
-                <a href="{% url 'forum' topic.pk %}?keyword={{ keyword }}&page={{ page_obj.paginator.num_pages }}">最後へ &raquo;</a>
+                <a href="{% url 'forum' topic.id %}?keyword={{ keyword }}&page={{ page_obj.next_page_number }}">次へ</a>
+                <a href="{% url 'forum' topic.id %}?keyword={{ keyword }}&page={{ page_obj.paginator.num_pages }}">最後へ &raquo;</a>
                 {% endif %}
             </span>
         </div>
 
-        <form class="message-form" action="{% url 'forum' topic.pk %}" method="POST" enctype="multipart/form-data">
+        {% if parent_message %}
+        <p>
+            >> {{ parent_message.user.username }}: {{ parent_message.content }}
+        </p>
+        {% endif %}
+
+        <form class="message-form" action="{% url 'forum' topic.id %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+            {% if parent_message %}
+            <input type="hidden" name="parent_message_pk" value="{{ parent_message.pk }}">
+            {% endif %}
             <input type="text" name="message" class="message-input" placeholder="メッセージを入力">
             {# <label> #}
                 {# 画像 #}
