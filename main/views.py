@@ -61,7 +61,7 @@ class IndexView(ListView):
 
 
 # def forum(request, topic_id):
-#     topic = Topic.objects.get(pk=topic_id)
+#     topic = Topic.objects.get(id=topic_id)
 #     messages = (
 #         Message.objects.filter(topic=topic).order_by("created_at")
 #     )
@@ -86,7 +86,7 @@ class ForumView(ListView):
     paginate_by = 5
 
     def get_topic(self):
-        return Topic.objects.get(pk=self.kwargs["topic_id"])
+        return Topic.objects.get(id=self.kwargs["topic_id"])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -99,10 +99,10 @@ class ForumView(ListView):
         form = MessageSearchForm(self.request.GET)
         context["search_form"] = form
 
-        parent_message_pk = self.request.GET.get("parent_message_pk")
-        if parent_message_pk:
+        parent_message_id = self.request.GET.get("parent_message_id")
+        if parent_message_id:
             parent_message = Message.objects.select_related("user").get(
-                pk=parent_message_pk
+                id=parent_message_id
             )
         else:
             parent_message = None
@@ -111,10 +111,10 @@ class ForumView(ListView):
 
     def get_queryset(self, **kwargs):
         subquery_for_username = Reply.objects.filter(
-            child_message=OuterRef("pk")
+            child_message=OuterRef("id")
         ).values("parent_message__user__username")
         subquery_for_content = Reply.objects.filter(
-            child_message=OuterRef("pk")
+            child_message=OuterRef("id")
         ).values("parent_message__content")
 
         topic = self.get_topic()
@@ -148,16 +148,16 @@ class ForumView(ListView):
                 image=image,
                 user=request.user,
             )
-            parent_message_pk = request.POST.get("parent_message_pk")
-            if parent_message_pk:
-                parent_message = Message.objects.get(pk=parent_message_pk)
+            parent_message_id = request.POST.get("parent_message_id")
+            if parent_message_id:
+                parent_message = Message.objects.get(id=parent_message_id)
                 Reply.objects.create(
                     parent_message=parent_message, child_message=new_message
                 )
-        return redirect("forum", topic_id=topic.pk)
+        return redirect("forum", topic_id=topic.id)
 
 
-def delete_message(request, topic_id, pk):
-    message = get_object_or_404(Message, pk=pk)
+def delete_message(request, topic_id, id):
+    message = get_object_or_404(Message, id=id)
     message.delete()
     return redirect("forum", topic_id=topic_id)
