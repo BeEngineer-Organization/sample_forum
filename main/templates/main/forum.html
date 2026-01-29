@@ -17,7 +17,7 @@
         <table class="message-list">
             <tr class="message-header">
                 <th>投稿内容</th>
-                <th>投稿者</th>{# 追加 #}
+                <th>投稿者</th>
                 <th>投稿日時</th>
                 <th>操作</th>
             </tr>
@@ -30,16 +30,16 @@
                     {% endif %}
                     {{ message.content }}
                 </td>
-                <td class="message-cell">{{ message.user.username }}</td>{# 追加 #}
-                <td class="message-cell">{{ message.created_at|elapsed_time }}</td>{# 追加 #}
+                <td class="message-cell">{{ message.user.username }}</td>
+                <td class="message-cell">{{ message.created_at|elapsed_time }}</td>
                 <td class="message-cell">
                     {% if message.user == request.user %}
-                    <form class="message-form" action="{% url 'delete_message' topic.id message.pk %}" method="POST">
+                    <form class="message-form" action="{% url 'delete_message' topic.id message.id %}" method="POST">
                         {% csrf_token %}
                         <input type="submit" class="btn-submit" value="削除">
                     </form>
                     {% else %}
-                    <a href="?keyword={{ keyword }}&page={{ page_obj.number }}&parent_message_pk={{ message.pk }}" class="btn-reply">返信</a>
+                    <a href="?keyword={{ keyword }}&page={{ page_obj.number }}&parent_message_id={{ message.id }}" class="btn-reply">返信</a>
                     {% endif %}
                 </td>
             </tr>
@@ -78,7 +78,7 @@
         <form class="message-form" action="{% url 'forum' topic.id %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {% if parent_message %}
-            <input type="hidden" name="parent_message_pk" value="{{ parent_message.pk }}">
+            <input type="hidden" name="parent_message_id" value="{{ parent_message.id }}">
             {% endif %}
             <input type="text" name="message" class="message-input" placeholder="メッセージを入力">
             {# <label> #}
