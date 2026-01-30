@@ -24,38 +24,37 @@ class IndexView(ListView):
             queryset = (
                 Topic.objects.all()
                 .annotate(
-                    topic_message__created_at__max=Max("topic_message__created_at"),
+                    latest_message_time=Max("topic_message__created_at"),
                     # 閲覧ユーザーのメッセージについた最新の返信が作成された時間
-                    topic_message_with_my_parent_reply__created_at__max=Max(
+                    latest_reply_time=Max(
                         "topic_message__created_at",
                         filter=Q(
                             topic_message__reply_from_child_message__parent_message__user=self.request.user
                         ),
                     ),
                     # 閲覧ユーザーの最新メッセージが作成された時間
-                    my_topic_message__created_at__max=Max(
+                    my_latest_message_time=Max(
                         "topic_message__created_at",
                         filter=Q(topic_message__user=self.request.user),
                     ),
-                    # 閲覧ユーザーのメッセージについた最新の返信と閲覧ユーザーの最新メッセージで新しいほう
+                    # 2 つを比較して、前者のほうが新しいときのみ取り出したい
+                    # 2 つのうち最も新しいものを取り出す
                     newest=Greatest(
-                        "topic_message_with_my_parent_reply__created_at__max",
-                        "my_topic_message__created_at__max",
+                        "latest_reply_time",
+                        "my_latest_message_time",
                     ),
-                    # 新しいほうが閲覧ユーザーのメッセージについた最新の返信である場合、それを返す。そうでなければ None を返す
-                    latest_reply_time=NullIf(
-                        "newest", "my_topic_message__created_at__max"
-                    ),
+                    # 最も新しいものが後者のとき、None を返す。そうでなければ前者を返す
+                    untouched_reply_time=NullIf("newest", "my_latest_message_time"),
                 )
-                .order_by("-latest_reply_time", "-topic_message__created_at__max")
+                .order_by("-untouched_reply_time", "-latest_message_time")
             )
         else:
             queryset = (
                 Topic.objects.all()
                 .annotate(
-                    topic_message__created_at__max=Max("topic_message__created_at"),
+                    latest_message_time=Max("topic_message__created_at"),
                 )
-                .order_by("-topic_message__created_at__max")
+                .order_by("-latest_message_time")
             )
         return queryset
 
