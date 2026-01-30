@@ -18,7 +18,7 @@
         <ul class="topic-list">
             {% for topic in topics %}
             <li class="topic-item">
-                <a class="topic-link" href="{% url 'forum' topic.id %}">{{ topic.name }}の掲示板へ {% if topic.latest_message_time %}最終更新: {{ topic.latest_message_time }}{% endif %} {% if topic.untouched_reply_time %}返信があります {% endif %}</a>
+                <a class="topic-link" href="{% url 'forum' topic.id %}">{{ topic.name }}の掲示板へ {% if topic.untouched_reply_time %}返信されました: {{ topic.untouched_reply_time }}{% else %}{% if topic.latest_message_time %}最終更新: {{ topic.latest_message_time }}{% endif %}{% endif %}</a>
             </li>
             {% endfor %}
         </ul>
